@@ -1,4 +1,4 @@
-name: Build and Deploy IMC App
+name: Deploy HTML App
 
 on:
   push:
@@ -6,21 +6,13 @@ on:
       - main  
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Install dependencies
-        run: |
-          cd frontend && npm install
-
-      - name: Build Project
-        run: |
-          cd frontend && npm run build
-
       - name: Snyk Security Scan
         uses: snyk/actions/node@master
         env:
@@ -28,6 +20,8 @@ jobs:
         with:
           args: --all-projects
 
-      - name: Deploy Application
-        run: |
-
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .  
