@@ -12,16 +12,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Snyk Security Scan
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Lighthouse Audit
+        uses: treosh/lighthouse-ci-action@v8
         with:
-          args: --all-projects
+          urls: "index.html"
+          output_path: "./lighthouse-report"
+          settings: '{"onlyCategories": ["accessibility", "best-practices", "performance"]}'
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .  
+          publish_dir: . 
