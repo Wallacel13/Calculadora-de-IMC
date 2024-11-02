@@ -3,23 +3,24 @@ name: Deploy HTML App
 on:
   push:
     branches:
-      - main  
+      - main  # Execute o pipeline na branch principal
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: 
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run Lighthouse Audit
-        uses: treosh/lighthouse-ci-action@v8
+      # Step 2: 
+      - name: HTML Validation
+        uses: cyb3r-jak3/htmlhint-action@v1
         with:
-          urls: "index.html"
-          output_path: "./lighthouse-report"
-          settings: '{"onlyCategories": ["accessibility", "best-practices", "performance"]}'
+          files: "index.html"  
 
+      # Step 3: 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
